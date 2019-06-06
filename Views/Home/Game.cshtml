@@ -1,0 +1,329 @@
+﻿@{
+    ViewData["Title"] = "Contact";
+}
+@*<h2>@ViewData["Title"]</h2>
+    <h3>@ViewData["Message"]</h3>*@
+@*<h3>@Model.Message</h3>*@
+@{
+    ViewData["Title"] = "Game";
+}
+@{
+    Layout = null;
+}
+@*<h3>@ViewData["x"]</h3>*@
+@*<h1>"Robot location is: " <span id="myY"></span> y: <span id="myX"></span></h1>*@
+
+
+<style>
+    .container {
+        margin: 0 auto;
+        position: relative;
+    }
+
+    .camera {
+        width: 100%;
+        height: auto;
+        position: absolute;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+    }
+
+    .canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 10;
+        /* background-color:rgba(255,0,220,0.5); */
+    }
+
+    iframe {
+        pointer-events: none;
+    }
+</style>
+
+
+<div class="container">
+    @*<video class="camera" id="vd1" controls autoPlay src="https://youtu.be/1Wclb27sgxc" onplay="resize_canvas(this)"></video>*@
+    @*    <video class="camera" id="vd1" controls autoPlay src="@ViewData["cameraIP"]" onplay="resize_canvas(this)"></video>*@
+    @*<iframe width="@ViewData["cameraWidth"]" height="@ViewData["cameraHeight"]" src="@ViewData["cameraIP"]" allow='autoplay' frameborder="0" onplay="resize_canvas(this)"></iframe>*@
+    <iframe id="videoIframe" position ="absolute" width="52.5%" height="50%" src="@ViewData["cameraIP"]" allow='autoplay' frameborder="0" onplay="resize_canvas(this)"></iframe>
+    <canvas class="canvas" id="canvas"></canvas>
+</div>
+
+
+@*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
+
+
+<script>
+    var target;
+    var robot;
+    function startGame() {
+        @*robot = new component(@ViewData["width"], @ViewData["height"], "@ViewData["color"]", @ViewData["x"], @ViewData["y"]);
+        target2 = new pelican()
+        target = new component(30, 30, "red", 50, 120);*@
+        robot = new component(30, 30, "../Content/boat2.svg", 20, 150);
+
+        target = new component(30, 30, "../Content/pelicanImg.svg", 350, 120);
+        myGameArea.start();
+    }
+
+    var myGameArea = {
+        firstClick: Boolean,
+        wasClicked: Boolean,
+        xClick: Number,
+        yClick: Number,
+        currScore: Number,
+        canvas: document.getElementById("canvas"),
+        start: function () {
+            this.xClick = Number('0');
+            this.yClick = Number('0');
+            this.currScore = Number('0');
+            this.firstClick = false;
+            this.wasClicked = false;
+
+            var dimension = [document.documentElement.clientWidth, document.documentElement.clientHeight];
+            // this.canvas.width = dimension[0];
+            // this.canvas.height = dimension[1];
+            this.canvas.addEventListener("mousedown", function (e) { getCursorPosition(this, e); });
+            this.canvas.width = window.document.getElementById("videoIframe").offsetWidth;
+            this.canvas.height = window.document.getElementById("videoIframe").offsetHeight;
+            this.context = this.canvas.getContext("2d");
+            document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+            this.interval = setInterval(updateGameArea, 20);
+
+            //Set Status as Ok
+            window.parent.document.getElementById("Status").innerHTML = "OK";
+            window.parent.document.getElementById("Status").className = "statusOK";
+
+            //Set score
+            window.parent.document.getElementById("currScore").innerHTML = this.currScore;
+        },
+        clear: function () {
+            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        }
+    }
+    function getCursorPosition(canvas, event, x, y) {
+        var rect = canvas.getBoundingClientRect();
+        myGameArea.xClick = event.clientX - rect.left;
+        myGameArea.yClick = event.clientY - rect.top;
+        console.log("x: " + myGameArea.xClick + " y: " + myGameArea.yClick);
+        myGameArea.firstClick = true;
+        myGameArea.wasClicked = true;
+        window.parent.document.getElementById("GoingX").innerHTML = myGameArea.xClick.toFixed(0).concat(",");
+        window.parent.document.getElementById("GoingY").innerHTML = myGameArea.yClick;
+    }
+    function pelican() {
+        this.img = new Image();
+        this.img.src = '~/Content/pelicanImg2.png';
+        this.update = function () {
+            ctx = myGameArea.context;
+            ctx.drawImage(this.img, 10, 10);
+        }
+    }
+    function component(width, height, imgSrc, x, y) {
+        this.width = width;
+        this.height = height;
+        this.speedX = 0;
+        this.speedY = 0;
+        this.x = x;
+        this.y = y;
+        this.img = new Image();
+        this.img.src = imgSrc;
+        this.img.onload = function () {
+            ctx = myGameArea.context;
+            ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+        }
+
+        this.update = function () {
+            //                    ctx = myGameArea.context;
+            //                  ctx.fillStyle = color;
+            //                ctx.fillRect(this.x, this.y, this.width, this.height);
+            ctx = myGameArea.context;
+            ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+        }
+        this.newPos = function () {
+            this.x += this.speedX;
+            this.y += this.speedY;
+        }
+        this.setLocation = function (newX, newY) {
+            this.x = newX;
+            this.y = newY;
+        }
+        @*this.reportLocationToModel = function () {
+            var input = {
+                x: this.x,
+                y: this.y
+        };
+        $.post("@Url.Action("setRobotInfo")", input, function () {}, "json");
+        }*@
+		this.reportLocationToModel = function () {
+			//document.getElementById("myX").innerHTML = this.x;
+			//document.getElementById("myY").innerHTML = this.y;
+            window.parent.document.getElementById("RobotX").innerHTML = this.x.toFixed(2);
+            window.parent.document.getElementById("RobotY").innerHTML = this.y.toFixed(2);
+
+        }
+        this.stopAll = function () {
+            this.speedX = 0;
+            this.speedY = 0;
+            window.parent.document.getElementById("GoingX").innerHTML = "";
+            window.parent.document.getElementById("GoingY").innerHTML = "";
+        }
+    }
+    function abortRobot() {
+        robot.stopAll();
+        window.parent.document.getElementById("Status").innerHTML = "Warning";
+        window.parent.document.getElementById("Status").className = "statusWarning";
+        window.parent.document.getElementById("RobotMessage").innerHTML = "Warning: Abort Button was Pressed!";
+
+    }
+    function updateGameArea() {
+        moveRobot();
+        checkHitTarget();
+
+        myGameArea.clear();
+        target.newPos();
+        target.update();
+        robot.newPos();
+        robot.update();
+        robot.reportLocationToModel();
+        
+    }
+    function checkHitTarget() {
+
+        left = target.x;
+        right = left + target.width;
+        //console.log('left:' + left + ' robot.x:' + robot.x + ' right:' + right);
+
+
+        bot = target.y + target.height;
+
+        //console.log('top:' + target.y + ' robot.y:' + robot.y + ' bot:' + bot);
+
+
+        if (robot.x >= left && robot.x <= right && robot.y >= target.y && robot.y <= bot) {
+            newX = Math.floor(Math.random() * (myGameArea.canvas.width - target.width));
+            newY = Math.floor(Math.random() * (myGameArea.canvas.height - target.height));
+            target.setLocation(newX, newY);
+            console.log('Hit!!!!!!!!');
+            console.log('newX' + newX);
+            myGameArea.currScore++;
+            if (myGameArea.currScore >= 5) {
+
+            }
+            else {
+                window.parent.document.getElementById("currScore").innerHTML = myGameArea.currScore;
+            }
+
+        }
+    }
+    function moveRobot() {
+        try {
+            if (myGameArea.firstClick) {
+
+                    //Check if a click happend, and move robot to location
+                if (myGameArea.wasClicked) {
+                    myGameArea.wasClicked = false;
+                    distance = Math.sqrt(Math.pow((myGameArea.xClick - robot.x), 2) + Math.pow((myGameArea.yClick - robot.y), 2));
+                    // console.log('xClick:' + myGameArea.xClick + ' robot.x:' + robot.x);
+                    // console.log('yClick:' + myGameArea.yClick + ' robot.y:' + robot.y);
+
+                    // console.log('dist: ' + distance);
+                    robot.speedX = 2 * (Math.abs(myGameArea.xClick - robot.x)) / distance;
+                    robot.speedY = 2 * (Math.abs(myGameArea.yClick - robot.y)) / distance;
+                    if ((robot.x) > myGameArea.xClick)
+                        robot.speedX *= -1;
+                    if ((robot.y) > myGameArea.yClick)
+                        robot.speedY *= -1;
+
+                    //console.log('speedX: ' + robot.speedX);
+                    //console.log('speedY: ' + robot.speedY);
+
+                    //Update robot Message
+                    window.parent.document.getElementById("RobotMessage").innerHTML = "Going to target";
+                    //Set Status as Ok
+                    window.parent.document.getElementById("Status").innerHTML = "OK";
+                    window.parent.document.getElementById("Status").className = "statusOK";
+                }
+                if (((robot.x + 2 * Math.abs(robot.speedX)) > myGameArea.xClick) && ((robot.x - 2 * Math.abs(robot.speedX)) < myGameArea.xClick)) {
+                    robot.speedX = 0;
+                    window.parent.document.getElementById("GoingX").innerHTML = "";
+                }
+                if (((robot.y + 2 * Math.abs(robot.speedY)) > myGameArea.yClick) && ((robot.y - 2 * Math.abs(robot.speedY)) < myGameArea.yClick)) {
+                    robot.speedY = 0;
+                    window.parent.document.getElementById("GoingY").innerHTML = "";
+                    window.parent.document.getElementById("RobotMessage").innerHTML = "Target Reached";
+                }
+            }
+        } catch (err) { console.log(err.message) }
+    }
+</script>
+<script>
+    window.onload = function () {
+        startGame();
+        batteryManager();
+    }
+
+    //Battery part
+    function batteryManager() {
+        fullBattery();
+        setTimeout(midBattery, 3000);
+        setTimeout(lowBattery, 10000);
+
+
+        function fullBattery() {
+            window.parent.document.getElementById("Battery").innerHTML = "[][][]";
+            window.parent.document.getElementById("Battery").className = "statusOK";
+        }
+        //function setMessageBack(firstMessage, tempMessage) {
+        //    let currentMessage = window.parent.document.getElementById("RobotMessage").innerHTML;
+        //    if (currentMessage == tempMessage) {
+        //        window.parent.document.getElementById("RobotMessage").innerHTML = firstMessage;
+        //    }
+        //}
+        function midBattery() {
+            window.parent.document.getElementById("Battery").innerHTML = "[][]";
+            window.parent.document.getElementById("Battery").className = "statusWarning";
+            //var tempStatus = window.parent.document.getElementById("Status").innerHTML;
+            //let firstMessage = window.parent.document.getElementById("RobotMessage").innerHTML;
+            //let tempMessage = "Half Battery";
+            window.parent.document.getElementById("RobotMessage").innerHTML = "50% Battery Remaning";
+            window.parent.document.getElementById("Status").innerHTML = "Warning";
+            window.parent.document.getElementById("Status").className = "statusWarning";
+            //setTimeout(setMessageBack(firstMessage, tempMessage), 5000);
+
+        }
+        function lowBattery() {
+            window.parent.document.getElementById("Battery").innerHTML = "[]";
+            window.parent.document.getElementById("Battery").className = "statusError";
+            window.parent.document.getElementById("RobotMessage").innerHTML = "Low-Battery!";
+            window.parent.document.getElementById("Status").innerHTML = "Warning";
+            window.parent.document.getElementById("Status").className = "statusWarning";
+        }
+    }
+
+</script>
+
+<script>
+
+
+    //Video is auto play,
+    //The resize function is called when video starts (search resize_canvas and find it)
+    function resize_canvas(element) {
+        var w = element.offsetWidth;
+        var h = element.offsetHeight;
+        var cv = document.getElementById("canvas");
+        //cv.width = w;
+        //cv.height = h;
+        cv.width = @ViewData["cameraWidth"];
+        cv.height = @ViewData["cameraHeight"];
+        console.log("w" + w);
+        console.log("h" + h);
+        console.log("width" + cv.width);
+        console.log("height" + cv.height);
+
+    }
+
+
+</script>

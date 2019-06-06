@@ -1,0 +1,227 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+<style>
+    .white {
+        color: white;
+        text-align:left;
+    }
+
+    .yellow {
+        color: yellow;
+    }
+
+    .black {
+        color: black;
+    }
+
+    .title {
+        font-size: 50px;
+    }
+</style>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+@*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
+
+<script>
+
+    $(document).ready(function () {
+        //$(".btn1").click(function () {
+        //    $(".title").fadeOut()
+        //});
+        //$(".btn2").click(function () {
+        //    $("p").fadeIn();
+        //});
+        //function showpanel() {
+        //    $(".title").delay(2000).fadeOut(400);
+        //    $(".title").delay(1500).fadeIn(400);
+        //}
+        //$.when(showpanel()).then(delay(1000)).then(function3());
+        //setTimeout(showpanel, 1000)
+        //function secondFunction() {
+        //    $(".title").text("Hello world!");
+        //}
+        //function function3() {
+        //    $(".title").text("HIIIIIIII!");
+        //}
+        
+        
+        //$(".title").delay(2000).fadeOut(2000, function () {
+        //    delay(2000).function() { $(this).text("World").fadeIn() };
+        //});
+        $('.btn').hide();
+        var infos = [
+            "Many pelicans travel around the world and eat tons of fishes, including from fish ponds"
+            ,"Each pelican may eat up to two kilograms of fish per day(!). <br> \
+So a group of thousands of pelicans might eat TONS of fishes in a single day.\
+<br> <img width='400' height='400' src='Content/groupPelicans.jpg'/> <img width='400' height='400' src='Content/groupPelicans2.jpg'/>",
+
+            "As a result, farmers suffer from a huge loss.They try to fight them, but unfortunately they sometimes shoot and harm them.",
+            "Our idea is to have a robotic boat which controlled by Amazon Mechanical Turk's users.<br>\
+As an AMT's user, you will watch the pool for couple of minutes and you will move the boat to a coming pelicant, in order to scare them - without hurting them."
+            , "For now, you will watch a live video that demonstrate a fish pond, with an illustration of a pelican and a boat. <br> \
+You need to find the pelican and click on it. This will move the boat and scary the pelican, forcing it go to another location.\
+ Please also notice the battery bar and the abort button.<br>\
+<img width='600' height='400' src='Content/instructions2.gif'/>"
+            ,"Are you ready?"
+        ];
+        function slide() {
+
+        $("#info p").delay(2000).fadeOut(1000, function () {
+            $(this).text("").append(infos[0]).fadeIn(1000, function () {
+                $("#info p").delay(2000).fadeOut(1000, function () {
+                    $(this).text("").append(infos[1]).fadeIn(1000, function () {
+                        $("#info p").delay(4000).fadeOut(1000, function () {
+                            $(this).text("").append(infos[2]).fadeIn(1000, function () {
+                                $("#info p").delay(3000).fadeOut(1000, function () {
+                                    $(this).text("").append(infos[3]).fadeIn(1000, function () {
+                                        $("#info p").delay(3000).fadeOut(1000, function () {
+                                            $(this).text("").append(infos[4]).fadeIn(1000, function () {
+                                                $("#info p").delay(3000).fadeOut(1000, function () {
+                                                    $(this).text("").append(infos[5]).fadeIn(1000, function () {
+                                                        $('.btn').show();
+                                                        $("#imready").click(function () {
+                                                            window.location.href = "Home/Manager";
+                                                        });
+                                                        $("#again").click(slide());
+                                                    });
+                                                });
+                                            });
+                                        });
+
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+
+        }
+        slide();
+    });
+</script>
+
+@*<p>This is a paragraph.</p>
+
+<button class="btn1">Fade out</button>
+<button class="btn2">Fade in</button>
+<p>If you click on me, I will disappear.</p>
+<p>Click me away!</p>
+<p>Click me too!</p>
+<p>This is a paragraph.</p>
+
+<button class="btn1">Fade out</button>*@
+
+@*<img src="~/Content/welcome2.jpg" />*@
+
+
+<center>
+    <h1 style="font-family:ravie" class="title"><span class="black">Welcome to </span><span class="title white">Peli</span><span class="title yellow">can't!</span></h1>
+</center>
+<br />
+<center id="info">
+    <span class="white" style="font-size:200%">
+        <p>
+            Hello, welcome to an application that might change the world. <br>
+            Please read the instructions and background-info for the next one minute
+        </p>
+    </span>
+    <button class="btn-danger btn" id="again">Repeat</button>
+    <button class="btn-success btn" id="imready">I'm ready</button>
+
+</center>
+@*<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+
+    <style>
+
+        .mySlides {
+            display: none;
+        }
+    </style>
+    <body>
+
+        <h2 class="w3-center">Manual Slideshow</h2>
+
+        <div class="w3-content w3-display-container">
+            <img class="mySlides" src="~/Content/welcome.jpg" style="width:100%">
+            <img class="mySlides" src="~/Content/pelicanImg2.png" style="width:100%">
+            <img class="mySlides" src="~/Content/welcome.jpg" style="width:100%">
+            <img class="mySlides" src="~/Content/welcome.jpg" style="width:100%">
+
+            <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
+            <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>
+        </div>
+
+        <script>
+            var slideIndex = 1;
+            showDivs(slideIndex);
+
+            function plusDivs(n) {
+                showDivs(slideIndex += n);
+            }
+
+            function showDivs(n) {
+                var i;
+                var x = document.getElementsByClassName("mySlides");
+                if (n > x.length) { slideIndex = 1 }
+                if (n < 1) { slideIndex = x.length }
+                for (i = 0; i < x.length; i++) {
+                    x[i].style.display = "none";
+                }
+                x[slideIndex - 1].style.display = "block";
+            }
+        </script>*@
+
+
+@*<div class="jumbotron">
+        <h1>ASP.NET</h1>
+        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
+        <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Getting started</h2>
+            <p>
+                ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
+                enables a clean separation of concerns and gives you full control over markup
+                for enjoyable, agile development.
+            </p>
+            <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Get more libraries</h2>
+            <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
+            <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Web Hosting</h2>
+            <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
+            <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+        </div>
+    </div>*@
+
+@*<div id="container">
+        <h1><a href="../../index.html" title="simpl.info home page">simpl.info</a> MediaStreamTrack.getSources</h1>
+
+        <div class="select">
+            <label for="audioSource">Audio source: </label><select id="audioSource"></select>
+        </div>
+
+        <div class="select">
+            <label for="videoSource">Video source: </label><select id="videoSource"></select>
+        </div>
+
+        <video muted autoplay></video>
+
+        <script src="~/Scripts/video.js"></script>
+
+        <p>This demo requires Chrome 30 or later.</p>
+
+        <p>For more information, see <a href="https://www.html5rocks.com/en/tutorials/getusermedia/intro/" title="Media capture article by Eric Bidelman on HTML5 Rocks">Capturing Audio &amp; Video in HTML5</a> on HTML5 Rocks.</p>
+
+        <a href="https://github.com/samdutton/simpl/blob/gh-pages/getusermedia/sources/js/main.js" title="View source for this page on GitHub" id="viewSource">View source on GitHub</a>
+
+    </div>*@

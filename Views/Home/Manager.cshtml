@@ -1,0 +1,123 @@
+﻿@{
+    ViewData["Title"] = "Manager";
+}
+@*<style>
+    body { background-image: url("https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg"); }
+    </style>*@
+<style>
+    .robotInfo {
+        margin: 0 auto;
+        position: relative;
+        font-family: "Times New Roman";
+        font-size: larger;
+        color: chartreuse;
+    }
+
+    h3 {
+        color:lightskyblue
+    }
+
+  
+    .tabled {
+        color: black;
+    }
+
+    .tableh {
+        color: orange;
+    }
+
+    .statusOK {
+        background-color: #4CAF50;
+        color: white;
+        text-align: center;
+    }
+
+    .statusError {
+        background-color: red;
+        color: white;
+        text-align: center;
+    }
+
+    .statusWarning {
+        background-color: orange;
+        color: white;
+        text-align: center;
+    }
+
+    .btn {
+        border: none;
+        /*background-color: inherit;
+        padding: 14px 28px;
+        font-size: 16px;
+        cursor: pointer;
+        display: inline-block;*/
+    }
+
+        .btn:hover {
+            background: #eee;
+        }
+
+
+    .warning {
+        color: orange;
+    }
+
+    .danger {
+        color: red;
+    }
+    .mycustom-jumbotron {
+        /*border: 10px solid #003366;*/
+        width: 40%;
+        /*margin: 0 auto;*/
+        /*right: 5%;
+        bottom:;*/
+        float: right;
+        display: inline-block;
+        background-color: #3684ff;
+        /*background-color: #ff6d00*/
+    }
+
+    .videoWrapper {
+        position: relative;
+        padding-bottom: 56.25%; /* 16:9 */
+        padding-top: 25px;
+        height: 0;
+    }
+
+        .videoWrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+</style>
+<div class="jumbotron mycustom-jumbotron">
+
+    <div class="robotInfo">
+        <table>
+            <tr><th><h2>Boat Info:</h2></th></tr>
+            <tr><th class="tableh">Location: </th> <td class="tabled"><span id="RobotX"></span>, <span id="RobotY"></span></td></tr>
+            <tr><th class="tableh">Going to: </th> <td class="tabled"><span id="GoingX"></span> <span id="GoingY"></span></td></tr>
+            <tr><th class="tableh">Message: </th> <td class="tabled"><span id="RobotMessage"></span></td></tr>
+            <tr><th class="tableh">Status: </th> <td><span id="Status"></span></td></tr>
+            <tr><th class="tableh">Battery: </th> <td><span id="Battery"></span></td></tr>
+            <tr></tr>
+        </table>
+        <button class="btn danger" onclick="abortRobot()">Abort Movement!</button>
+        <h4>Score: <span id="currScore"></span></h4>
+    </div>
+</div>
+<div class="videoWrapper">
+    <!-- Copy & Pasted from YouTube -->
+    <iframe id="game" width="560" height="349"
+            src="@Url.Action("Game", "Home")" scrolling="no" frameborder="0" allowfullscreen></iframe>
+</div>
+
+<script>
+    function abortRobot() {
+        document.getElementById("game").contentWindow.abortRobot();
+    }
+</script>
+
+
